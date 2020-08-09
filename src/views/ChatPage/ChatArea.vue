@@ -126,7 +126,10 @@ export default {
         userID: this.$store.state.userID,
       });
       this.$store.commit("quitSession", this.activeSession.sessionID);
-      this.$router.replace("/sessions");
+
+      if (this.mobileMode) {
+        this.$router.replace("/sessions");
+      }
     },
   },
 };
