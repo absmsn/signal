@@ -1,0 +1,15 @@
+.centered{
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  display: block;
+}
+
+.centered-text{
+  text-align: center;
+}
+
+.hidden{
+  display: none;
+}
