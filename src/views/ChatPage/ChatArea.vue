@@ -71,6 +71,7 @@ Vue.use(Icon);
 Vue.use(Dropdown);
 Vue.use(Menu);
 
+
 export default {
   name: "chat-area",
   data() {

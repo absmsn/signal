@@ -39,9 +39,7 @@
 import Vue from "vue";
 import md5 from "blueimp-md5";
 import MultiCharInput from "@/components/MultiCharInput";
-import { PageHeader, Radio, Upload, Button } from "ant-design-vue";
-
-Vue.use(PageHeader);
+import { Radio, Upload, Button } from "ant-design-vue";
 Vue.use(Upload);
 Vue.use(Radio);
 
@@ -55,7 +53,7 @@ export default {
     };
   },
   components: {
-    MultiCharInput,
+    MultiCharInput
   },
   methods: {
     // 向服务器请求添加会话
@@ -184,10 +182,11 @@ export default {
     flex-direction: column;
     align-items: center;
     margin-top: 60px;
-    .char-token-area {
+    .char-token-area, .file-token-area {
       width: 400px;
       margin: 40px 0;
       max-width: 100%;
+      text-align: center;
       > div {
         justify-content: center;
       }

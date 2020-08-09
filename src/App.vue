@@ -7,6 +7,7 @@
 <script>
 import { Modal } from 'ant-design-vue'
 
+
 export default {
   name: "App",
   methods: {
