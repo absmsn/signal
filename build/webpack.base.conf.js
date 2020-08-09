@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path')
+const webpack = require('webpack')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
@@ -30,6 +31,9 @@ module.exports = {
       "@ant-design/icons/lib/dist$": path.resolve(__dirname, "../src/icons.js")
     }
   },
+  plugins: [
+    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/)
+  ],
   module: {
     rules: [
       {
