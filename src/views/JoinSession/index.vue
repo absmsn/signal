@@ -143,7 +143,7 @@ export default {
         this.$router.push("sessions");
       } else if (data.sessionStatus === "full") {
         this.$message.error("会话已满，不能加入!");
-        this.charToken = "";
+        // this.charToken = "";
         this.fileToken = [];
       }
     },
