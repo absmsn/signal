@@ -157,11 +157,13 @@ export default {
       }
       $peerAreaSize: 16px;
       .session-name {
-        flex: 1 0 auto;
+        flex: 1 1 auto;
         text-align: center;
         line-height: $barHeight;
         font-weight: 700;
         margin-right: -$peerAreaSize;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .peer-status {
         display: flex;
