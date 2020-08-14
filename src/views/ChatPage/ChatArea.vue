@@ -149,6 +149,7 @@ export default {
       $barHeight: 48px;
       flex: 0 0 $barHeight;
       box-shadow: 0 0 10px #cfcfcf;
+      border-bottom: 1ps solid #dfdfdf;
       display: flex;
       .back-home-btn {
         flex: 0 0 $barHeight;

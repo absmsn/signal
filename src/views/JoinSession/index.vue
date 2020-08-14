@@ -115,6 +115,13 @@ export default {
       this.fileToken = [...this.fileToken, file];
       return false;
     },
+    getColorFromStr(str){
+      if(typeof str !== 'string') return
+      if(str.length < 6) return str.padStart(6, "0")
+
+      let subStr = str.slice(str.length-6, str.length)
+      return "#" + subStr
+    }
   },
   sockets: {
     joinSession(data) {
@@ -134,6 +141,7 @@ export default {
             }
           }
         }
+        data.color = this.getColorFromStr(data.sessionID)
         this.$store.commit("joinSession", data);
         if (!this.$store.activeSession) {
           this.$store.commit("setActiveSession", data.sessionID);

@@ -4,9 +4,11 @@
       <!--消息所在的日期-->
       <i class="message-time-day" v-if="firstMsgOfDay(i)">{{ message.sendTime | toDate }}</i>
       <div class="message-item">
-        <div class="user-avatar-area">
-          <div class="user-avatar">{{ message.source === "self"?"我":"" }}</div>
-        </div>
+        <user-avatar
+          class="user-avatar-area"
+          :text="message.source === 'self'?'我':''"
+          :color="activeSession.color"
+        ></user-avatar>
         <a-dropdown :trigger="['contextmenu']" class="message-body">
           <text-msg
             v-if="message.msgType === 'text'"
@@ -26,15 +28,26 @@
         </a-dropdown>
         <div class="send-time">{{ message.sendTime | toTime }}</div>
         <div class="msg-status">
-          <img src="../../assets/img/cached.svg" v-if="message.msgStatus === 'cached'" />
-          <img src="../../assets/img/sending.svg" v-else-if="message.msgStatus === 'sending'" />
-          <img src="../../assets/img/received.svg" v-else-if="message.msgStatus === 'received'" />
+          <img src="../../assets/img/cached.svg" v-if="message.msgStatus === 'cached'" title="已缓存" />
+          <img
+            src="../../assets/img/sending.svg"
+            v-else-if="message.msgStatus === 'sending'"
+            title="发送中"
+          />
+          <img
+            src="../../assets/img/received.svg"
+            v-else-if="message.msgStatus === 'received'"
+            title="对端收到"
+          />
           <img
             src="../../assets/img/waiting.svg"
             v-else-if="message.msgStatus === 'send_waiting' || message.msgStatus === 'msgID_waiting'"
+            title="等待发送"
           />
         </div>
       </div>
+      <!-- 何时提示消息以缓存 -->
+      <div class="centered-text" v-if="lastCachedMsg(i)">对方离线,消息已缓存</div>
     </li>
   </ul>
 </template>
@@ -42,12 +55,14 @@
 <script>
 import { mapState } from "vuex";
 import TextMsg from "@/components/TextMsg";
+import UserAvatar from "@/components/UserAvatar";
 
 export default {
   name: "message-box",
   props: ["messages"],
   components: {
     TextMsg,
+    UserAvatar,
   },
   methods: {
     getRowDirectionStyle(source) {
@@ -80,6 +95,13 @@ export default {
         return last !== cur;
       }
     },
+    lastCachedMsg(i) {
+      // 非缓存消息
+      if (this.messages[i].msgStatus !== "cached") return false;
+      // 最后一个消息
+      if (i === this.messages.length - 1) return true;
+      return this.messages[i + 1].msgStatus !== "cached";
+    },
     // 将文本消息的内容复制到剪切板
     pasteTextToBoard(text) {
       let input = document.createElement("input");
@@ -92,7 +114,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["mobileMode"]),
+    ...mapState(["mobileMode", "activeSession"]),
   },
   filters: {
     toTime(date) {
@@ -161,19 +183,6 @@ export default {
     .user-avatar-area {
       grid-row: span 2;
       margin: 0 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .user-avatar {
-        text-align: center;
-        $avatarSize: 32px;
-        height: $avatarSize;
-        width: $avatarSize;
-        line-height: $avatarSize;
-        font-weight: 700;
-        border-radius: 50%;
-        background-color: yellow;
-      }
     }
     .message-body {
       grid-row: span 2;

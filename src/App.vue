@@ -110,7 +110,7 @@ export default {
           let token = session.token;
           Modal.confirm({
             title: "没能重新加入会话",
-            content: `请注意,没能重新加入会话 ${token}, 有其他人加入了你所在的会话`,
+            content: `没能重新加入会话 ${token}, 有其他人加入了你所在的会话`,
             okText: "我已明白"
           })
         }

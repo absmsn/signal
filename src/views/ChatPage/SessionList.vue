@@ -8,15 +8,9 @@
       :key="session.sessionID"
       @click="switchChatBox(session)"
     >
-      <div class="avatar-area">
-        <div class="avatar centered-text" :style="{background: ''}">{{ session.token[0] }}</div>
-      </div>
-      <div class="session-name">
-        {{ session.token }}
-      </div>
-      <div class="last-msg-overview">
-        {{ lastMsgs[i]?lastMsgs[i].msg:"" }}
-      </div>
+      <user-avatar class="avatar-area" :color="session.color" :text="session.token[0]"></user-avatar>
+      <div class="session-name">{{ session.token }}</div>
+      <div class="last-msg-overview">{{ lastMsgs[i]?lastMsgs[i].msg:"" }}</div>
       <div class="unread-count-area">
         <div
           v-if="session.unreadCount !== 0"
@@ -30,9 +24,13 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import UserAvatar from "@/components/UserAvatar";
 
 export default {
   name: "session-list",
+  components: {
+    UserAvatar,
+  },
   data() {
     return {};
   },
@@ -57,18 +55,22 @@ export default {
   filters: {
     // 如果时间是今天的，返回时间，否则返回日期
     toDateOrTime(date) {
-      if(!date) return ""
+      if (!date) return "";
       if (!(date instanceof Date)) {
         date = new Date(date);
       }
       let now = new Date();
       if (now.getYear() !== now.getYear()) {
-        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-      }else if(now.getMonth() !== date.getMonth() || 
-               now.getDate() !== date.getDate()){
-        return `${date.getMonth()+1}-${date.getDate()}`
-      }else{
-        return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      } else if (
+        now.getMonth() !== date.getMonth() ||
+        now.getDate() !== date.getDate()
+      ) {
+        return `${date.getMonth() + 1}-${date.getDate()}`;
+      } else {
+        return `${String(date.getHours()).padStart(2, "0")}:${String(
+          date.getMinutes()
+        ).padStart(2, "0")}`;
       }
     },
   },
@@ -94,19 +96,8 @@ export default {
       background-color: #efefef;
     }
     .avatar-area {
-      $avatarSize: 32px;
       grid-row: span 2;
       grid-column: 1;
-      place-self: center center;
-      .avatar {
-        // color: white;
-        height: $avatarSize;
-        width: $avatarSize;
-        border-radius: 50%;
-        font-weight: 700;
-        background-color: yellow;
-        line-height: $avatarSize;
-      }
     }
     .session-name,
     .last-msg-overview {
@@ -137,6 +128,8 @@ export default {
     }
     .send-time {
       place-self: center;
+      font-weight: 700;
+      font-size: 12px;
     }
   }
 }
