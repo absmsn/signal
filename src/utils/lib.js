@@ -10,7 +10,7 @@ function binarySearch(arr, key, value) {
       m = (s + e) >> 1,
       cur
     while (s !== e) {
-      cur = key===""?arr[m]:arr[m][key]
+      cur = key === "" ? arr[m] : arr[m][key]
       try {
         if (cur > value) {
           e = m - 1
@@ -27,7 +27,20 @@ function binarySearch(arr, key, value) {
   }
 }
 
+function debounce(callback, wait){
+  let timeout
+  return function(){
+    let context = this
+    if(timeout) clearTimeout(timeout)
+
+    timeout = setTimeout(()=>{
+      callback.apply(context, arguments)
+    }, wait)
+  }
+}
+
 export {
   checkMobileMode,
-  binarySearch
+  binarySearch,
+  debounce
 }

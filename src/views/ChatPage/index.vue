@@ -19,7 +19,7 @@ import { mapState, mapGetters } from "vuex";
 import Vue from "vue";
 import SessionList from "./SessionList";
 import ChatArea from "./ChatArea";
-import { checkMobileMode } from "../../utils/lib";
+import { checkMobileMode, debounce } from "../../utils/lib";
 import { Button } from "ant-design-vue";
 
 Vue.use(Button);
@@ -31,7 +31,7 @@ export default {
     SessionList
   },
   mounted() {
-    window.addEventListener("resize", this.setMobileMode);
+    window.addEventListener("resize", debounce(this.setMobileMode, 500));
   },
   destroyed() {
     window.removeEventListener("resize", this.setMobileMode);
