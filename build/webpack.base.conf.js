@@ -28,7 +28,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-      "@ant-design/icons/lib/dist$": path.resolve(__dirname, "../src/icons.js")
+      "@ant-design/icons/lib/dist$": path.resolve(__dirname, "../src/utils/icons.js")
     }
   },
   plugins: [
