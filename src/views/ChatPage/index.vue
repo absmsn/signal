@@ -28,7 +28,7 @@ export default {
   name: "chat-page",
   components: {
     ChatArea,
-    SessionList
+    SessionList,
   },
   mounted() {
     window.addEventListener("resize", debounce(this.setMobileMode, 500));
@@ -39,12 +39,14 @@ export default {
   methods: {
     setMobileMode() {
       let mobileMode = checkMobileMode();
-      this.$store.commit("setMobileMode", mobileMode);
-    }
+      if (mobileMode !== this.mobileMode) {
+        this.$store.commit("setMobileMode", mobileMode);
+      }
+    },
   },
   computed: {
-    ...mapState(["mobileMode", "sessions", "activeSession"])
-  }
+    ...mapState(["mobileMode", "sessions", "activeSession"]),
+  },
 };
 </script>
 
@@ -64,8 +66,6 @@ export default {
         margin: 6px;
         // float: right;
       }
-    }
-    .session-area {
     }
   }
   .chat-area {
