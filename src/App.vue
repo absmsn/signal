@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import { Modal } from 'ant-design-vue'
-
+import { Modal } from "ant-design-vue";
 
 export default {
   name: "App",
@@ -106,13 +105,13 @@ export default {
             });
             this.$set(msg, "msgStatus", "msgID_waiting");
           }
-        }else{
+        } else {
           let token = session.token;
           Modal.confirm({
             title: "没能重新加入会话",
             content: `没能重新加入会话 ${token}, 有其他人加入了你所在的会话`,
-            okText: "我已明白"
-          })
+            okText: "我已明白",
+          });
         }
       }
     },
@@ -151,12 +150,28 @@ export default {
       );
       if (message) {
         // FIXME:操作太快属性不更新
-        message.msgStatus = "received"
+        message.msgStatus = "received";
       }
     },
     pushOfflines(sessions) {
       for (let session of sessions) {
         this.$store.commit("pushOfflines", session.sessionID, session.offlines);
+      }
+    },
+    recallResult(result) {
+      if (result.result && result.result === "successed") {
+        this.$store.commit("clearMessage", {
+          msgID: result.msgID,
+          sessionID: result.sessionID,
+        });
+      } else {
+        let message = this.$store.getters.getMessageByMsgID(
+          result.sessionID,
+          result.msgID
+        );
+        if (message) {
+          message.msgStatus = "recall_failed";
+        }
       }
     },
   },

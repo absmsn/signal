@@ -23,7 +23,11 @@
               v-if="message.msgType === 'text'"
             >复制消息文本</a-menu-item>
             <a-menu-item :key="i+'_2'">删除消息</a-menu-item>
-            <a-menu-item :key="i+'_3'" v-if="message.msgStatus === 'cached'">撤回消息</a-menu-item>
+            <a-menu-item
+              :key="i+'_3'"
+              v-if="message.msgStatus === 'cached'"
+              @click="recallOffline(message)"
+            >撤回消息</a-menu-item>
           </a-menu>
         </a-dropdown>
         <div class="send-time">{{ message.sendTime | toTime }}</div>
@@ -47,15 +51,25 @@
         </div>
       </div>
       <!-- 何时提示消息以缓存 -->
-      <div class="centered-text" v-if="lastCachedMsg(i)">对方离线,消息已缓存</div>
+      <div class="centered-text" v-if="lastCachedMsg(i)">
+        <a-tag color="cyan">对方离线,消息已缓存</a-tag>
+      </div>
+      <!-- 提示撤回消息失败 -->
+      <div class="centered-text" v-if="message.msgStatus === 'recall_failed'">
+        <a-tag color="red">消息撤回失败</a-tag>
+      </div>
     </li>
   </ul>
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapState } from "vuex";
 import TextMsg from "@/components/TextMsg";
 import UserAvatar from "@/components/UserAvatar";
+import { Tag } from 'ant-design-vue'
+
+Vue.use(Tag)
 
 export default {
   name: "message-box",
@@ -95,6 +109,7 @@ export default {
         return last !== cur;
       }
     },
+    // 检查是否为会话中最后一个缓存消息，若是，则显示提示信息
     lastCachedMsg(i) {
       // 非缓存消息
       if (this.messages[i].msgStatus !== "cached") return false;
@@ -111,6 +126,12 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(input);
       this.$message.success("复制成功");
+    },
+    recallOffline(msg) {
+      this.$socket.client.emit("recallOffline", {
+        msgID: msg.msgID,
+        sessionID: this.activeSession.sessionID,
+      });
     },
   },
   computed: {
