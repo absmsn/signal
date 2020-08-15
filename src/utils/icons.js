@@ -26,5 +26,3 @@ export {
   default as ExclamationCircleOutline
 } from '@ant-design/icons/lib/outline/ExclamationCircleOutline'
 
-
-
