@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "node app.js",
+    "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
     "build": "node build/build.js"
@@ -14,7 +14,6 @@
   "dependencies": {
     "ant-design-vue": "^1.6.3",
     "blueimp-md5": "^2.16.0",
-    "express": "^4.17.1",
     "socket.io-client": "^2.3.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
