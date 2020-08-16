@@ -124,7 +124,13 @@ export default {
       // TODO:各种消息的等待队列
       if (message) {
         message.msgID = msg.msgID;
-        this.$socket.client.emit("msgr", message);
+        this.$socket.client.emit("msgr", {
+          msg: message.msg,
+          msgID: message.msgID,
+          msgType: message.msgType,
+          sessionID: message.sessionID,
+          userID: this.$store.state.userID
+        });
         this.$set(message, "msgStatus", "sending");
       }
     },
