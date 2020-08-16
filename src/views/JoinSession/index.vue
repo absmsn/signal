@@ -124,9 +124,8 @@ export default {
     }
   },
   sockets: {
-    joinSession(data) {
+    joinResult(data) {
       if (data.sessionStatus === "joined") {
-        delete data.userID;
 
         if (data.messages) {
           for (let msg of data.messages) {
