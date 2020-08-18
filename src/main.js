@@ -10,7 +10,7 @@ import { message, notification } from 'ant-design-vue'
 
 Vue.config.productionTip = false
 
-const socket = io('http://localhost:3000');
+const socket = io('http://52.187.132.228:3000');
 Vue.use(VueSocketIOExt, socket);
 
 Vue.prototype.$message = message;
