@@ -16,7 +16,7 @@
             :message="message"
           ></text-msg>
           <a-menu slot="overlay">
-            <!-- <div>没有msgID时使用localMsgID</div> -->
+            <!-- 没有msgID时使用localMsgID -->
             <a-menu-item
               :key="i+'_1'"
               @click="pasteTextToBoard(message.msg)"
@@ -127,6 +127,7 @@ export default {
       document.body.removeChild(input);
       this.$message.success("复制成功");
     },
+    // 撤回消息
     recallOffline(msg) {
       this.$socket.client.emit("recallOffline", {
         msgID: msg.msgID,
@@ -159,11 +160,11 @@ export default {
     },
   },
   watch: {
-    messages() {
-      this.$nextTick(() => {
-        this.$el.scrollTo(0, this.$el.scrollHeight);
-      });
-    },
+    // messages(newVals, oldVals) {
+    //   this.$nextTick(() => {
+    //     this.$el.scrollTo(0, this.$el.scrollHeight);
+    //   });
+    // },
   },
 };
 </script>

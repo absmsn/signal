@@ -53,7 +53,7 @@ export default {
     };
   },
   components: {
-    MultiCharInput
+    MultiCharInput,
   },
   methods: {
     // 向服务器请求添加会话
@@ -115,18 +115,17 @@ export default {
       this.fileToken = [...this.fileToken, file];
       return false;
     },
-    getColorFromStr(str){
-      if(typeof str !== 'string') return
-      if(str.length < 6) return str.padStart(6, "0")
+    getColorFromStr(str) {
+      if (typeof str !== "string") return;
+      if (str.length < 6) return str.padStart(6, "0");
 
-      let subStr = str.slice(str.length-6, str.length)
-      return "#" + subStr
-    }
+      let subStr = str.slice(str.length - 6, str.length);
+      return "#" + subStr;
+    },
   },
   sockets: {
     joinResult(data) {
       if (data.sessionStatus === "joined") {
-
         if (data.messages) {
           for (let msg of data.messages) {
             this.$socket.client.emit("ackn", {
@@ -140,12 +139,16 @@ export default {
             }
           }
         }
-        data.color = this.getColorFromStr(data.sessionID)
+        data.color = this.getColorFromStr(data.sessionID);
         this.$store.commit("joinSession", data);
         if (!this.$store.activeSession) {
           this.$store.commit("setActiveSession", data.sessionID);
         }
-        this.$router.push("sessions");
+        if (this.$store.state.mobileMode) {
+          this.$router.replace("/chat");
+        }else{
+          this.$router.replace("/sessions");
+        }
       } else if (data.sessionStatus === "full") {
         this.$message.error("会话已满，不能加入!");
         // this.charToken = "";
@@ -189,7 +192,8 @@ export default {
     flex-direction: column;
     align-items: center;
     margin-top: 60px;
-    .char-token-area, .file-token-area {
+    .char-token-area,
+    .file-token-area {
       width: 400px;
       margin: 40px 0;
       max-width: 100%;

@@ -12,6 +12,13 @@ let getSessionByID = (state, sessionID) => {
   return state.sessions.find(x => x.sessionID === sessionID)
 }
 
+let getMsgByMsgID = (state, sessionID, msgID) => {
+  let session = getSessionByID(state, sessionID)
+  if (session) {
+    return session.messages.find(x => x.msgID === msgID)
+  }
+}
+
 const store = new Vuex.Store({
   state: {
     mobileMode: mobileMode,
@@ -19,7 +26,7 @@ const store = new Vuex.Store({
     activeSession: null,
     userID: null,
     localMsgID: 0,
-    online: true // 是否联网
+    online: true // 是否连接到服务器
   },
   mutations: {
     // 参数最多两个
@@ -118,7 +125,7 @@ const store = new Vuex.Store({
     clearMessage(state, {
       sessionID,
       msgID
-    }){
+    }) {
       let session = getSessionByID(state, sessionID)
       if (session) {
         let i = session.messages.findIndex(x => x.msgID === msgID)
@@ -126,9 +133,18 @@ const store = new Vuex.Store({
           session.messages.splice(i, 1)
         }
       }
+    },
+    updateMessage(state, {
+      sessionID,
+      msgID,
+      object
+    }) {
+      let msg = getMsgByMsgID(state, sessionID, msgID)
+      if(msg){
+        Object.assign(msg, object)
+      }
     }
   },
-  actions: {},
   getters: {
     getLastMessages: (state) => {
       return state.sessions.map(x => x.messages[x.messages.length - 1])
@@ -137,17 +153,12 @@ const store = new Vuex.Store({
       return getSessionByID(state, sessionID)
     },
     getMessageByMsgID: (state) => (sessionID, msgID) => {
-      let session = state.sessions.find(x => x.sessionID === sessionID)
-      if (session) {
-        let msg = session.messages.find(x => x.msgID === msgID)
-        return msg
-      }
+      return getMsgByMsgID(state, sessionID, msgID)
     },
     getMessageByLocalMsgID: state => (sessionID, localMsgID) => {
-      let session = state.sessions.find(x => x.sessionID === sessionID)
+      let session = getSessionByID(state, sessionID)
       if (session) {
-        let msg = session.messages.find(x => x.localMsgID === localMsgID)
-        return msg
+        return session.messages.find(x => x.localMsgID === localMsgID)
       }
     }
   }

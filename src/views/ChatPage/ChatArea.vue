@@ -86,13 +86,13 @@ export default {
   computed: {
     ...mapState(["mobileMode", "activeSession", "sessions"]),
   },
-  watch: {
-    mobileMode: function (prev, cur) {
+  /*watch: {
+    mobileMode: function (cur, prev) {
       if (prev === true && cur === false) {
         this.$router.replace("/sessions");
       }
     },
-  },
+  },*/
   methods: {
     sendTextMsg() {
       if (this.currentText === "") return;
@@ -149,7 +149,7 @@ export default {
       $barHeight: 48px;
       flex: 0 0 $barHeight;
       box-shadow: 0 0 10px #cfcfcf;
-      border-bottom: 1ps solid #dfdfdf;
+      border-bottom: 1px solid #dfdfdf;
       display: flex;
       .back-home-btn {
         flex: 0 0 $barHeight;

@@ -6,10 +6,25 @@
 
 <script>
 import { Modal } from "ant-design-vue";
+import { mapState, mapGetters } from "vuex";
+import { checkMobileMode } from "./utils/lib";
 
 export default {
   name: "App",
+  mounted() {
+    // FIXME:解决移动端因为防抖造成的问题
+    window.addEventListener("resize", this.setMobileMode);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.setMobileMode);
+  },
   methods: {
+    setMobileMode() {
+      let mobileMode = checkMobileMode();
+      if (mobileMode !== this.mobileMode) {
+        this.$store.commit("setMobileMode", mobileMode);
+      }
+    },
     handleMsgN(msg) {
       this.$socket.client.emit("ackn", {
         userID: msg.userID,
@@ -20,18 +35,14 @@ export default {
       if (msg.userID) {
         delete msg.userID;
       }
-      if (msg.msgStatus) {
-        delete msg.msgStatus;
-      }
-      // 不能直接使用msg.localMsgID判断
-      if (typeof msg.localMsgID === "number") {
-        delete msg.localMsgID;
-      }
       if (msg.sendTime) {
         msg.sendTime = new Date(msg.sendTime);
       }
       this.$store.commit("pushMessage", msg);
     },
+  },
+  computed: {
+    ...mapState(["mobileMode", "sessions", "activeSession"]),
   },
   sockets: {
     userID(userID) {
@@ -129,35 +140,36 @@ export default {
           msgID: message.msgID,
           msgType: message.msgType,
           sessionID: message.sessionID,
-          userID: this.$store.state.userID
+          userID: this.$store.state.userID,
         });
         this.$set(message, "msgStatus", "sending");
       }
     },
     ackr(msg) {
-      let message = this.$store.getters.getMessageByMsgID(
-        msg.sessionID,
-        msg.msgID
-      );
-      if (message) {
-        this.$set(message, "msgStatus", msg.msgStatus);
-        if (msg.sendTime) {
-          this.$set(message, "sendTime", new Date(msg.sendTime));
-        }
+      let obj = {
+        msgStatus: msg.msgStatus,
       }
+      if(msg.sendTime){
+        obj.sendTime = new Date(msg.sendTime)
+      }
+      this.$store.commit("updateMessage", {
+        sessionID: msg.sessionID,
+        msgID: msg.msgID,
+        object: obj
+      });
     },
     msgn(msg) {
       this.handleMsgN(msg);
     },
     acka(msg) {
-      let message = this.$store.getters.getMessageByMsgID(
-        msg.sessionID,
-        msg.msgID
-      );
-      if (message) {
-        // FIXME:操作太快属性不更新
-        message.msgStatus = "received";
-      }
+      // FIXME:操作太快属性不更新
+      this.$store.commit("updateMessage", {
+        sessionID: msg.sessionID,
+        msgID: msg.msgID,
+        object: {
+          msgStatus: "received",
+        },
+      });
     },
     pushOfflines(sessions) {
       for (let session of sessions) {
@@ -171,13 +183,13 @@ export default {
           sessionID: result.sessionID,
         });
       } else {
-        let message = this.$store.getters.getMessageByMsgID(
-          result.sessionID,
-          result.msgID
-        );
-        if (message) {
-          message.msgStatus = "recall_failed";
-        }
+        this.$store.commit("updateMessage", {
+          sessionID: result.sessionID,
+          msgID: result.msgID,
+          object: {
+            msgStatus: "recall_failed",
+          },
+        });
       }
     },
   },

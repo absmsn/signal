@@ -30,22 +30,8 @@ export default {
     ChatArea,
     SessionList,
   },
-  mounted() {
-    window.addEventListener("resize", debounce(this.setMobileMode, 500));
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.setMobileMode);
-  },
-  methods: {
-    setMobileMode() {
-      let mobileMode = checkMobileMode();
-      if (mobileMode !== this.mobileMode) {
-        this.$store.commit("setMobileMode", mobileMode);
-      }
-    },
-  },
   computed: {
-    ...mapState(["mobileMode", "sessions", "activeSession"]),
+    ...mapState(["mobileMode", "sessions"]),
   },
 };
 </script>

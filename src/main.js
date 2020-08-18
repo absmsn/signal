@@ -31,13 +31,14 @@ new Vue({
 // TODO:消息时间 DONE
 // TODO:修改input样式 DONE
 // TODO:离线消息显示 DONE
-// TODO:消息撤回
+// TODO:消息撤回 DONE
+// TODO:添加等待动画
+// TODO:重传机制和保证消息不重不漏
 // TODO:消息删除
-// TODO:事件节流和防抖
+// TODO:事件节流和防抖 DONE
 // TODO:使用手势操作库
 // TODO:传输Token文件
 // TODO:修改会话密码
 // TODO:添加转场动画
 // TODO:各种消息的等待队列，如msgr,ackn
-// TODO:重传机制和保证消息不重不漏
 // TODO:二维码扫描添加

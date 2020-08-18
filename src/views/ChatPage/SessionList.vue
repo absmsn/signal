@@ -42,7 +42,7 @@ export default {
         this.$store.commit("setActiveSession", session.sessionID);
       }
       if (this.$store.state.mobileMode) {
-        this.$router.replace("/chat");
+        this.$router.push("/chat");
       }
     },
   },
